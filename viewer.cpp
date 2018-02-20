@@ -246,6 +246,8 @@ private:
   {
 	//void resize(InputArray src, OutputArray dst, Size dsize, double fx=0, double fy=0, int interpolation )
 	//fx,fy = scaling parameters see opencv doc resize
+	// For shrinking use interpolation INTER_AREA
+	// For enlarging use interpolation INTER_CUBIC
 	cv::resize(inC,outC,cv::Size(width,height),0.0,0.0,cv::INTER_CUBIC);
 	cv::resize(inD,outD,cv::Size(width,height),0.0,0.0,cv::INTER_CUBIC);
   }
