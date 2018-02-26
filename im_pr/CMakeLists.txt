@@ -211,3 +211,10 @@ target_link_libraries(image_shrinker
 	${OpenCV_LIBRARIES}
 )
 add_dependencies(image_shrinker ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(spoof src/spoof.cpp)
+target_link_libraries(spoof 
+	${catkin_LIBRARIES}
+	${OpenCV_LIBRARIES}
+)
+add_dependencies(spoof ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

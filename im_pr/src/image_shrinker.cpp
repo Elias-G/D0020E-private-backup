@@ -13,30 +13,37 @@ image_transport::Publisher pub;
     cv_bridge::CvImageConstPtr pCvImage;
     pCvImage = cv_bridge::toCvShare(old_image, old_image->encoding);
     pCvImage->image.copyTo(image);
-}
+	}
 
 
 
 
 void imageCallback(const sensor_msgs::ImageConstPtr& old_image)
 {
-		cv_bridge::CvImagePtr cv_ptr;
+		cv_bridge::CvImagePtr cv_ptr_in;
+
+		cv_bridge::CvImagePtr cv_ptr_out;
+
+
 		cv::Mat color;
 		cv::Mat color_resized;
 
-		readImage(old_image,color);
+		//readImage(old_image,color);
 
-		cv_ptr = cv_bridge::toCvCopy(old_image,sensor_msgs::image_encodings::BGR8);
+		cv_ptr_in = cv_bridge::toCvCopy(old_image,sensor_msgs::image_encodings::BGR8);
+
+		cv_ptr_out = cv_bridge::toCvCopy(old_image,sensor_msgs::image_encodings::BGR8);
 
 
 //		cv::resize(color, cv_ptr->image, color.size(),0.
 //0,0.0, cv::INTER_LINEAR);
-		cv::resize(color, cv_ptr->image, cv::Size(1000,1000),0.0,0.0, cv::INTER_CUBIC);
+		//width,heigth
+		cv::resize(cv_ptr_out->image, cv_ptr_out->image, cv::Size(1920,1080),0.0,0.0, cv::INTER_CUBIC);
 
 
-		cv_ptr->toImageMsg();
+		cv_ptr_out->toImageMsg();
 
-		pub.publish(cv_ptr->toImageMsg());
+		pub.publish(cv_ptr_out->toImageMsg());
         // created shared pointer Image
         sensor_msgs::Image::Ptr small_image =
                         boost::make_shared<sensor_msgs::Image>();
@@ -83,8 +90,8 @@ int main(int argc, char **argv)
         ros::NodeHandle nh;
         image_transport::ImageTransport it(nh);
         image_transport::Subscriber sub =
-                        it.subscribe("usb_cam/image_raw", 1, imageCallback);
-        pub = it.advertise("usb_cam/image_small", 1);
+                        it.subscribe("web_cam/image_raw", 1, imageCallback);
+        pub = it.advertise("web_cam/image_small", 1);
 
         ros::spin();
         printf("Im out! No error.");
