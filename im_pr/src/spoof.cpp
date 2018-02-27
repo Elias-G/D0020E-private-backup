@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/Int32.h"
+#include "std_msgs/Header.h"
 
 #include <sstream>
 
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher Spoof_pub = n.advertise<std_msgs::Int32>("velocity", 10);
+  ros::Publisher Spoof_pub = n.advertise<std_msgs::Header>("velocity", 10);
 
   ros::Rate loop_rate(10);
 
@@ -58,8 +59,16 @@ int main(int argc, char **argv)
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-    std_msgs::Int32 vel;
-	vel.data=100;
+	count++;
+	usleep(15);
+    std_msgs::Header vel;
+	//if(count>100){
+	//count=0;	
+	//}
+	//vel.data=count;
+	vel.seq=50;
+	vel.stamp=ros::Time::now();
+	vel.frame_id=1;
 
     //ROS_INFO(vel.data);
 
