@@ -1,6 +1,8 @@
 #include "ros/ros.h"
 #include "std_msgs/Int32.h"
 #include "std_msgs/Header.h"
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/CameraInfo.h>
 
 #include <sstream>
 
@@ -45,9 +47,9 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher Spoof_pub = n.advertise<std_msgs::Header>("velocity", 10);
+  ros::Publisher Spoof_pub = n.advertise<sensor_msgs::CameraInfo>("velocity", 10);
 
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(100);
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -60,15 +62,15 @@ int main(int argc, char **argv)
      * This is a message object. You stuff it with data, and then publish it.
      */
 	count++;
-	usleep(15);
-    std_msgs::Header vel;
-	//if(count>100){
-	//count=0;	
-	//}
-	//vel.data=count;
-	vel.seq=50;
-	vel.stamp=ros::Time::now();
-	vel.frame_id=1;
+	usleep(10000);
+    sensor_msgs::CameraInfo sp_image;
+	if(count>60){
+	count=0;	
+	}
+	sp_image.header.stamp=ros::Time::now();
+	sp_image.header.frame_id="Spoofed_camerainfo_only_to_get_timestamp";
+	sp_image.height=50;
+	sp_image.width=count;
 
     //ROS_INFO(vel.data);
 
@@ -78,7 +80,7 @@ int main(int argc, char **argv)
      * given as a template parameter to the advertise<>() call, as was done
      * in the constructor above.
      */
-    Spoof_pub.publish(vel);
+    Spoof_pub.publish(sp_image);
 
     ros::spinOnce();
 
